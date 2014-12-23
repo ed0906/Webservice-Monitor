@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 
+import model.MetricSet;
 import model.Webservice;
 
 import org.junit.After;
@@ -41,6 +43,15 @@ public class WebserviceStorageManagerTest {
 		storage.delete(TEST_WEBSERVICE_NAME);
 		
 		assertNull(storage.getWebservice(TEST_WEBSERVICE_NAME));
+	}
+	
+	@Test
+	public void shouldUpdateMetrics() throws SQLException, IOException {
+		MetricSet metrics = new MetricSet(200, 0l, new Date().getTime());
+		
+		storage.save(TEST_WEBSERVICE_NAME, metrics);
+		
+		assertEquals(metrics, storage.getLatestMetrics(TEST_WEBSERVICE_NAME));
 	}
 	
 	@After

@@ -13,9 +13,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import model.Metric;
 import model.Webservice;
 import util.Logger;
-import api.Metric;
 import api.MonitorAPI;
 import api.WebserviceValidator;
 

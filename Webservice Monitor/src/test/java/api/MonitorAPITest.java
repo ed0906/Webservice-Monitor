@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import model.Metric;
 import model.Webservice;
 
 import org.junit.After;

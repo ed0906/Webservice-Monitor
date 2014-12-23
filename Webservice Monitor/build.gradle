@@ -3,7 +3,7 @@ apply plugin: 'jetty'
 apply plugin: 'eclipse'
 apply plugin: 'war'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.6
 
 repositories {
 	mavenCentral()

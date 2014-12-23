@@ -1,4 +1,4 @@
-package api;
+package model;
 
 public enum Metric {
 	RESPONSE_CODE,
