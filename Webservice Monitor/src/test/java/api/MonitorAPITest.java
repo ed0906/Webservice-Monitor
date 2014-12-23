@@ -60,7 +60,7 @@ public class MonitorAPITest {
 	}
 	
 	@After
-	public void tearDown() throws SQLException {
+	public void tearDown() throws SQLException, IOException {
 		monitorApi.deleteWebservice(TEST_WEBSERVICE1_NAME);
 		monitorApi.deleteWebservice(TEST_WEBSERVICE2_NAME);
 	}

@@ -34,7 +34,7 @@ public class WebserviceStorageManagerTest {
 	}
 	
 	@Test
-	public void shouldDeleteWebservice() throws SQLException{
+	public void shouldDeleteWebservice() throws SQLException, IOException{
 		Webservice service = new Webservice(TEST_WEBSERVICE_NAME,TEST_WEBSERVICE_URL);
 		
 		storage.save(service);
@@ -44,7 +44,7 @@ public class WebserviceStorageManagerTest {
 	}
 	
 	@After
-	public void tearDown() throws SQLException {
+	public void tearDown() throws SQLException, IOException {
 		storage.delete(TEST_WEBSERVICE_NAME);
 	}
 }

@@ -22,7 +22,7 @@ public class MonitorAPI {
 		}
 	}
 	
-	public void reset() throws SQLException {
+	public void reset() throws SQLException, IOException {
 		storage.clear();
 	}
 
@@ -38,7 +38,7 @@ public class MonitorAPI {
 		return storage.listWebservices();
 	}
 	
-	public void deleteWebservice(String serviceName) throws SQLException {
+	public void deleteWebservice(String serviceName) throws SQLException, IOException {
 		storage.delete(serviceName);
 	}
 	

@@ -1,7 +1,8 @@
 package util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.BeforeClass;
@@ -17,11 +18,9 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testSelect() {
-		try {
-			database.executeQuery("SELECT * FROM webservice");
-		} catch (SQLException e) {
-			fail();
-		}
+	public void shouldConnect() throws SQLException, IOException {
+		database.connect();
+		
+		assertTrue(database.isConnected());
 	}
 }

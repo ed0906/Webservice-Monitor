@@ -22,11 +22,11 @@ public class WebserviceStorageManager {
 		}
 	}
 
-	public void clear() throws SQLException {
+	public void clear() throws SQLException, IOException {
 		database.executeUpdate("DELETE FROM webservice");
 	}
 	
-	public Webservice getWebservice(String serviceName) throws SQLException{
+	public Webservice getWebservice(String serviceName) throws SQLException, IOException{
 		ResultSet result = database.executeQuery("SELECT * FROM webservice WHERE "+ WEBSERVICE_NAME + " = ?", serviceName);
 		if(result.next()){
 			String webserviceName = result.getString(WEBSERVICE_NAME);
@@ -36,7 +36,7 @@ public class WebserviceStorageManager {
 		return null;
 	}
 
-	public void save(Webservice service) throws SQLException {
+	public void save(Webservice service) throws SQLException, IOException {
 		database.executeUpdate("REPLACE INTO webservice VALUES (?, ?)", service.getName(), service.getUrl());
 	}
 	
@@ -51,7 +51,7 @@ public class WebserviceStorageManager {
 		return services;
 	}
 
-	public void delete(String serviceName) throws SQLException {
+	public void delete(String serviceName) throws SQLException, IOException {
 		database.executeUpdate("DELETE FROM webservice WHERE " + WEBSERVICE_NAME + " = ?", serviceName);
 	}	
 }

@@ -82,9 +82,7 @@ public final class MainResource {
 	@Path("service")
 	@Produces(MEDIA_TYPE)
 	public Response addWebservice(@QueryParam("service-name") String serviceName, @QueryParam("url") String serviceUrl){
-		//String serviceName = form.getFirst("service-name");
-		//String serviceUrl = form.getFirst("url");
-		
+		Logger.info("Add Service Request");
 		Webservice service = new Webservice(serviceName, serviceUrl);
 		
 		int responseCode = WebserviceValidator.getResponseCode(service);
@@ -96,10 +94,27 @@ public final class MainResource {
 				Logger.warning("Add service failed", e);
 				return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).header(ORIGIN, CLIENT).build();
 			}
+			Logger.info("Added service " + serviceName + " at " + serviceUrl);
 			return Response.ok().entity("Success").header(ORIGIN, CLIENT).build();
 		}else{
 			Logger.warning("Add service failed with response code: " + responseCode);
 			return Response.status(responseCode).entity("Failed to add the webservice, returned response: " + responseCode).header(ORIGIN, CLIENT).build();
+		}
+	}
+	
+	@POST
+	@Path("service/delete")
+	@Produces(MEDIA_TYPE)
+	public Response removeWebservice(@QueryParam("service-name") String serviceName){
+		Logger.info("Remove Service Request");
+		MonitorAPI api = new MonitorAPI();
+		try {
+			api.deleteWebservice(serviceName);
+			Logger.info("Deleted webservice " + serviceName);
+			return Response.ok().header(ORIGIN, CLIENT).build();
+		} catch (Exception e) {
+			Logger.warning("Failed to delete service " + serviceName, e);
+			return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).entity("Failed to remove the webservice").header(ORIGIN, CLIENT).build();
 		}
 	}
 }
