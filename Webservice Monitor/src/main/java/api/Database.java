@@ -1,9 +1,12 @@
-package util;
+package api;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import util.ApplicationProperties;
+import util.Logger;
 
 public class Database {
 	

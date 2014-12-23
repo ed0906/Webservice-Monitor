@@ -47,7 +47,7 @@ public class WebserviceStorageManagerTest {
 	
 	@Test
 	public void shouldUpdateMetrics() throws SQLException, IOException {
-		MetricSet metrics = new MetricSet(200, 0l, new Date().getTime());
+		MetricSet metrics = new MetricSet(200, 0l, new Date(114, 11, 23, 18, 25, 15).getTime());
 		
 		storage.save(TEST_WEBSERVICE_NAME, metrics);
 		

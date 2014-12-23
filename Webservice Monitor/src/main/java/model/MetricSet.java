@@ -1,14 +1,14 @@
 package model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class MetricSet {
 	private int responseCode;
 	private long responseTime;
 	private long date;
-	
-	public MetricSet(int responseCode, long responseTime, long date){
+
+	public MetricSet(int responseCode, long responseTime, long date) {
 		this.responseCode = responseCode;
 		this.responseTime = responseTime;
 		this.date = date;
@@ -25,9 +25,14 @@ public class MetricSet {
 	public long getDate() {
 		return date;
 	}
-	
+
 	@Override
-	public boolean equals(Object object){
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+
+	@Override
+	public boolean equals(Object object) {
 		return EqualsBuilder.reflectionEquals(this, object);
 	}
 }

@@ -6,15 +6,19 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import api.Scheduler;
 import util.Logger;
 
 public class WebserviceRunner {
 
+	private Scheduler scheduler;
+	
 	private Server server;
 	private int port;
 	private String host;
 
 	public WebserviceRunner(String host, int port) {
+		this.scheduler = new Scheduler();
 		this.server = new Server(port);
 		this.host = host;
 		this.port = port;
@@ -52,10 +56,14 @@ public class WebserviceRunner {
 		server.setHandler(handlers);
 		server.start();
 		Logger.info("API started... at 'http://" + getHostAndPort() + "'");
+		
+		scheduler.start();
+		Logger.info("Scheduler started");
 	}
 	
 	public void stop() throws Exception {
 		server.stop();
+		scheduler.stop();
 		Logger.info("API stopped");
 		
 	}

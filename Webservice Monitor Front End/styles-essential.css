@@ -73,6 +73,10 @@ header{
 	padding-right: 5px;
 }
 
+#delete{
+	cursor: pointer;
+}
+
 #footer{
 	display: block;
 	width: 100%;

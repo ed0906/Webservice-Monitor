@@ -23,7 +23,13 @@ function loadTable() {
 				var cell4 = row.insertCell(3);
 				var cell5 = row.insertCell(4);
 				cell1.innerHTML = json[i].name;
-				cell5.innerHTML = "<img src=\"res/x_blue.png\" onClick=\"removeEntry('" + json[i].name + "')\">";
+				cell2.innerHTML = json[i].metrics.responseCode;
+				if(json[i].metrics.responseCode == 200){
+					cell2.style.background = 'red';
+				}
+				cell3.innerHTML = json[i].metrics.responseTime;
+				cell4.innerHTML = new Date(json[i].metrics.date).toUTCString();
+				cell5.innerHTML = "<img src=\"res/x_blue.png\" id=\"delete\" onClick=\"removeEntry('" + json[i].name + "')\">";
 				
 			}
 			

@@ -1,8 +1,9 @@
 package resource;
 
 import java.net.HttpURLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,8 +14,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import model.Metric;
+import model.MetricSet;
 import model.Webservice;
+import model.WebserviceOverview;
+
+import org.apache.commons.lang3.StringUtils;
+
 import util.Logger;
 import api.MonitorAPI;
 import api.WebserviceValidator;
@@ -40,7 +45,7 @@ public final class MainResource {
 		Logger.info("List Service Request");
 		MonitorAPI api = new MonitorAPI();
 		try {
-			List<Webservice> services = api.getWebserviceList();
+			List<WebserviceOverview> services = api.getWebserviceList();
 			return Response.ok(services).header(ORIGIN, CLIENT).build();
 		} catch (Exception e) {
 			Logger.warning("List services failed", e);
@@ -70,11 +75,44 @@ public final class MainResource {
 		Logger.info("Update Service Request");
 		MonitorAPI api = new MonitorAPI();		
 		try {
-			Map<Metric, Number> metricMap = api.getUpdate(serviceName, Metric.values());
-			return Response.ok(metricMap).header(ORIGIN, CLIENT).build();
+			MetricSet metrics = api.getUpdate(serviceName);
+			return Response.ok(metrics).header(ORIGIN, CLIENT).build();
 		} catch (Exception e) {
 			Logger.warning("Update service failed", e);
 			return Response.status(HttpURLConnection.HTTP_NO_CONTENT).entity("No such service").header(ORIGIN, CLIENT).build();
+		}
+	}
+	
+	@GET
+	@Path("/service/{serviceName}/metrics")
+	public Response getMetrics(@PathParam("serviceName") String serviceName, @QueryParam("from") String from, @QueryParam("until") String until){
+		Logger.info("Update Service Request");
+		MonitorAPI api = new MonitorAPI();
+		
+		try{
+			Date dateUntil;
+			Date dateFrom;
+			if(StringUtils.isEmpty(until) && StringUtils.isEmpty(from)){
+				MetricSet metrics = api.getMetrics(serviceName);
+				return Response.ok(metrics).header(ORIGIN, CLIENT).build();
+			}else{
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				if(StringUtils.isEmpty(until)){
+					dateUntil = new Date();
+				}else{
+					dateUntil = format.parse(until);
+				}
+				if(StringUtils.isEmpty(from)){
+					dateFrom = new Date(System.currentTimeMillis()-24*3600000);
+				}else{
+					dateFrom = format.parse(from);
+				}
+				List<MetricSet> metrics = api.getMetrics(serviceName, dateFrom, dateUntil);
+				return Response.ok(metrics).header(ORIGIN, CLIENT).build();
+			}
+		}catch(Exception e){
+			Logger.error("Failed to get metrics",e);
+			return Response.status(HttpURLConnection.HTTP_BAD_REQUEST).header(ORIGIN, CLIENT).build();
 		}
 	}
 	

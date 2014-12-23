@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import api.Database;
+
 public class ApplicationPropertiesTest {
 		
 	@Test

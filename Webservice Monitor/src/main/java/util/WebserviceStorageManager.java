@@ -1,20 +1,22 @@
 package util;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import model.MetricSet;
 import model.Webservice;
+import model.WebserviceOverview;
+import api.Database;
 
 import com.google.common.collect.Lists;
 
 public class WebserviceStorageManager {
 	
-	private Database database;
+	private static Database database;
 	
 	private final static String WEBSERVICE_TABLE = "webservice";
 	private final static String DATA_TABLE = "webservice_metrics";
@@ -25,17 +27,28 @@ public class WebserviceStorageManager {
 	private final static String WEBSERVICE_RESPONSE_TIME = "response_time";
 	
 	public WebserviceStorageManager() {
-		database = new Database();
+		if(database == null){
+			database = new Database();
+		}
 	}
 
 	public void clear() throws SQLException, IOException {
-		PreparedStatement statement = database.getConnection().prepareStatement("DELETE FROM webservice");
-		statement.executeUpdate();
+		PreparedStatement statement1 = database.getConnection().prepareStatement("DELETE FROM " + WEBSERVICE_TABLE);
+		
+		Logger.info("Making Query: [" + statement1 + "]");
+		statement1.executeUpdate();
+		
+		PreparedStatement statement2 = database.getConnection().prepareStatement("DELETE FROM " + DATA_TABLE);
+		
+		Logger.info("Making Query: [" + statement2 + "]");
+		statement2.executeUpdate();
 	}
 	
 	public Webservice getWebservice(String serviceName) throws SQLException, IOException{
 		PreparedStatement statement = database.getConnection().prepareStatement("SELECT * FROM " + WEBSERVICE_TABLE + " WHERE "+ WEBSERVICE_NAME + " = ?");
-		statement.setString(0, serviceName);
+		statement.setString(1, serviceName);
+		
+		Logger.info("Making Query: [" + statement + "]");
 		ResultSet result = statement.executeQuery();
 		if(result.next()){
 			String webserviceName = result.getString(WEBSERVICE_NAME);
@@ -47,48 +60,85 @@ public class WebserviceStorageManager {
 
 	public void save(Webservice service) throws SQLException, IOException {
 		PreparedStatement statement = database.getConnection().prepareStatement("REPLACE INTO " + WEBSERVICE_TABLE + " VALUES (?, ?)");
-		statement.setString(0, service.getName());
-		statement.setString(0, service.getUrl());
+		statement.setString(1, service.getName());
+		statement.setString(2, service.getUrl());
+		
+		Logger.info("Making Query: [" + statement + "]");
 		statement.executeUpdate();
 	}
 	
-	public List<Webservice> listWebservices() throws IOException, SQLException {
-		PreparedStatement statement = database.getConnection().prepareStatement("SELECT * FROM " + WEBSERVICE_TABLE);
+	public List<WebserviceOverview> listWebservices() throws IOException, SQLException {
+		PreparedStatement statement = database.getConnection().prepareStatement("SELECT t1.name, t1.url, t2.* FROM " + WEBSERVICE_TABLE + " t1 LEFT JOIN (SELECT name, max(date) as mx from " + DATA_TABLE + " GROUP BY name) as X ON X.name = t1.name LEFT JOIN " + DATA_TABLE + " t2 ON t2.name = X.name AND t2.date = X.mx");
+		
+		Logger.info("Making Query: [" + statement + "]");
 		ResultSet result = statement.executeQuery();
-		List<Webservice> services = Lists.newArrayList();
+		List<WebserviceOverview> services = Lists.newArrayList();
 		while(result.next()){
 			String webserviceName = result.getString(WEBSERVICE_NAME);
 			String webserviceUrl = result.getString(WEBSERVICE_URL);
-			services.add(new Webservice(webserviceName, webserviceUrl));
+			int responseCode = result.getInt(WEBSERVICE_RESPONSE_CODE);
+			long responseTime = result.getLong(WEBSERVICE_RESPONSE_TIME);
+			Timestamp datetime = result.getTimestamp(WEBSERVICE_DATE);
+			services.add(new WebserviceOverview(webserviceName, webserviceUrl, new MetricSet(responseCode, responseTime, datetime.getTime())));
 		}
 		return services;
 	}
 
 	public void delete(String serviceName) throws SQLException, IOException {
-		PreparedStatement statement = database.getConnection().prepareStatement("DELETE FROM " + WEBSERVICE_TABLE + " WHERE " + WEBSERVICE_NAME + " = ?");
-		statement.setString(0, serviceName);
-		statement.executeUpdate();
+		PreparedStatement statement1 = database.getConnection().prepareStatement("DELETE FROM " + WEBSERVICE_TABLE + " WHERE " + WEBSERVICE_NAME + " = ?");
+		statement1.setString(1, serviceName);
+		
+		Logger.info("Making Query: [" + statement1 + "]");
+		statement1.executeUpdate();
+		
+		PreparedStatement statement2 = database.getConnection().prepareStatement("DELETE FROM " + DATA_TABLE + " WHERE " + WEBSERVICE_NAME + " = ?");
+		statement2.setString(1, serviceName);
+		
+		Logger.info("Making Query: [" + statement2 + "]");
+		statement2.executeUpdate();
 	}
 	
 	public void save(String serviceName, MetricSet metrics) throws SQLException, IOException{
 		PreparedStatement statement = database.getConnection().prepareStatement("REPLACE INTO " + DATA_TABLE + " VALUES (?, ?, ?, ?)");
-		statement.setString(0, serviceName);
-		statement.setInt(1, metrics.getResponseCode());
-		statement.setLong(2, metrics.getResponseTime());
-		statement.setDate(0, new Date(metrics.getDate()));
+		statement.setString(1, serviceName);
+		statement.setInt(2, metrics.getResponseCode());
+		statement.setLong(3, metrics.getResponseTime());
+		statement.setTimestamp(4, new Timestamp(metrics.getDate()));
+		
+		Logger.info("Making Query: [" + statement + "]");
 		statement.executeUpdate();
 	}
 	
 	public MetricSet getLatestMetrics(String serviceName) throws SQLException, IOException{
 		PreparedStatement statement = database.getConnection().prepareStatement("SELECT * FROM " + DATA_TABLE + " WHERE " + WEBSERVICE_NAME + " = ? ORDER BY " + WEBSERVICE_DATE + " ASC LIMIT 1");
-		statement.setString(0, serviceName);
+		statement.setString(1, serviceName);
+		
+		Logger.info("Making Query: [" + statement + "]");
 		ResultSet result = statement.executeQuery();
 		if(result.next()){
 			int responseCode = result.getInt(WEBSERVICE_RESPONSE_CODE);
 			long responseTime = result.getLong(WEBSERVICE_RESPONSE_TIME);
-			Date date = result.getDate(WEBSERVICE_DATE);
-			return new MetricSet(responseCode, responseTime, date.getTime());
+			Timestamp datetime = result.getTimestamp(WEBSERVICE_DATE);
+			return new MetricSet(responseCode, responseTime, datetime.getTime());
 		}
 		return null;
+	}
+	
+	public List<MetricSet> getMetricsBetween(String serviceName, long time1, long time2) throws SQLException, IOException{
+		PreparedStatement statement = database.getConnection().prepareStatement("SELECT * FROM " + DATA_TABLE + " WHERE (" + WEBSERVICE_NAME + " = ? AND " + WEBSERVICE_DATE + " BETWEEN ? AND ?)");
+		statement.setString(1, serviceName);
+		statement.setTimestamp(2, new Timestamp(time1));
+		statement.setTimestamp(3, new Timestamp(time2));
+		
+		Logger.info("Making Query: [" + statement + "]");
+		ResultSet result = statement.executeQuery();
+		List<MetricSet> metrics = Lists.newArrayList();
+		while(result.next()){
+			int responseCode = result.getInt(WEBSERVICE_RESPONSE_CODE);
+			long responseTime = result.getLong(WEBSERVICE_RESPONSE_TIME);
+			Timestamp datetime = result.getTimestamp(WEBSERVICE_DATE);
+			metrics.add(new MetricSet(responseCode, responseTime, datetime.getTime()));
+		}
+		return metrics;
 	}
 }

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import util.Logger;
 import model.Webservice;
+import util.Logger;
 
 public class WebserviceValidator {
 

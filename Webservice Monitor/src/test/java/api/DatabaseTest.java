@@ -1,4 +1,4 @@
-package util;
+package api;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import api.Database;
 
 public class DatabaseTest {
 
