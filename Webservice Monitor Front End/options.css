@@ -5,7 +5,7 @@ CSS settings for HTML div Exact Center
 #abc {
 	width:100%;
 	height:100%;
-	opacity:.96;
+	opacity:1;
 	top:0;
 	left:0;
 	display:none;
@@ -45,6 +45,7 @@ p {
 
 h2 {
 	background-color:#0f6eb1;
+	color: white;
 	padding:20px 35px;
 	margin:-10px -50px;
 	text-align:center;

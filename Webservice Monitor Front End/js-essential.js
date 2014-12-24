@@ -1,5 +1,7 @@
+var host = "http://localhost:8315"
+
 function loadTable() {
-	var url = "http://localhost:8315/api/service";
+	var url = host + "/api/service";
 	var xmlHttp = new XMLHttpRequest();
     
 	xmlHttp.onreadystatechange=function() {
@@ -24,7 +26,7 @@ function loadTable() {
 				var cell5 = row.insertCell(4);
 				cell1.innerHTML = json[i].name;
 				cell2.innerHTML = json[i].metrics.responseCode;
-				if(json[i].metrics.responseCode == 200){
+				if(json[i].metrics.responseCode != 200){
 					cell2.style.background = 'red';
 				}
 				cell3.innerHTML = json[i].metrics.responseTime;
@@ -56,7 +58,7 @@ function validateOptions() {
 	if (name == "" || url == "") {
 		alert("Both name & Url fields must be filled");
 	} else {
-		var validateUrl = "http://localhost:8315/api/service?service-name=" + name + "&url=" + url;
+		var validateUrl = host + "/api/service?service-name=" + name + "&url=" + url;
 		var xmlHttp = new XMLHttpRequest();
 		
 		xmlHttp.onreadystatechange=function() {
@@ -77,7 +79,7 @@ function validateOptions() {
 
 function removeEntry(serviceName) {
 	if(confirm("Are you sure you want to delete " + serviceName + "?")){
-		var validateUrl = "http://localhost:8315/api/service/delete?service-name=" + name;
+		var validateUrl = host + "/api/service/delete?service-name=" + name;
 		var xmlHttp = new XMLHttpRequest();
 		
 		xmlHttp.onreadystatechange=function() {

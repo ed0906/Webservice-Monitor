@@ -25,14 +25,14 @@ public class Scheduler {
 	}
 	
 	public void start() throws SQLException, Exception {
-		scheduler.scheduleWithFixedDelay(getRunnableTask(), 5l, DELAY_SECONDS, TimeUnit.SECONDS);
+		scheduler.scheduleWithFixedDelay(getRunnableUpdateTask(), 5l, DELAY_SECONDS, TimeUnit.SECONDS);
 	}
 	
 	public void stop(){
 		scheduler.shutdownNow();
 	}
 	
-	private static Runnable getRunnableTask() {
+	private static Runnable getRunnableUpdateTask() {
 		return new Runnable(){
 				@Override
 				public void run() {

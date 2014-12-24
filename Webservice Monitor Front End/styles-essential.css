@@ -29,6 +29,7 @@ header{
 	font-weight: 300;
 	font-size: xx-large;
 	padding-top: 30px;
+	padding-left: 0px;
 }
 
 #header-lower{
@@ -90,6 +91,7 @@ header{
 
 #main-menu{
 	height: 100%;
+	padding-left:0px;
 }
 
 #main-menu li{
