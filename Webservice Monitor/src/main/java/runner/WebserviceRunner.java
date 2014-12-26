@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import api.Scheduler;
+import util.ApplicationProperties;
 import util.Logger;
 
 public class WebserviceRunner {
@@ -69,6 +70,8 @@ public class WebserviceRunner {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		new WebserviceRunner("localhost", 8315).start();
+		String host = ApplicationProperties.getValueOf("application.host");
+		int port = Integer.parseInt(ApplicationProperties.getValueOf("application.port"));
+		new WebserviceRunner(host, port).start();
 	}
 }

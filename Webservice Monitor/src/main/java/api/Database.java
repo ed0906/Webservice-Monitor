@@ -16,13 +16,21 @@ public class Database {
 
 	private static Connection connection;
 	
-	public void connect() throws SQLException, IOException {
+	public boolean connect() throws SQLException, IOException {
 		String url = ApplicationProperties.getValueOf(PROPERTY_KEY_URL);
 		String user = ApplicationProperties.getValueOf(PROPERTY_KEY_USER);
 		String password = ApplicationProperties.getValueOf(PROPERTY_KEY_PASSWORD);
 		
 		connection = DriverManager.getConnection(url, user, password);
 		Logger.info("Connecting to " + url);
+		
+		boolean isConnected = isConnected();
+		if(isConnected){
+			Logger.info("Connection successful");
+		}else{
+			Logger.error("Connection failed");
+		}
+		return isConnected;
 	}
 	
 	public void disconnect() throws SQLException {
