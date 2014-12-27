@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import runner.WebserviceRunner;
 
-public class MainResourceTest {
+public class HealthcheckResourceTest {
 
 	private static WebserviceRunner runner;
 	
@@ -32,7 +32,7 @@ public class MainResourceTest {
 	
 	@Test
 	public void testHealthCheck() throws IOException {
-		Response response = get("/api/healthcheck");
+		Response response = get("");
 		
 		assertEquals(200, response.getStatus());
 	}

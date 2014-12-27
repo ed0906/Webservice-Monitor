@@ -1,7 +1,7 @@
 var host = "http://localhost:8315"
 
 function loadTable() {
-	var url = host + "/api/service";
+	var url = host + "/api/service/all";
 	var xmlHttp = new XMLHttpRequest();
     
 	xmlHttp.onreadystatechange=function() {
@@ -58,7 +58,7 @@ function validateOptions() {
 	if (name == "" || url == "") {
 		alert("Both name & Url fields must be filled");
 	} else {
-		var validateUrl = host + "/api/service?service-name=" + name + "&url=" + url;
+		var validateUrl = host + "/api/service/add?service-name=" + name + "&url=" + url;
 		var xmlHttp = new XMLHttpRequest();
 		
 		xmlHttp.onreadystatechange=function() {
@@ -79,7 +79,7 @@ function validateOptions() {
 
 function removeEntry(serviceName) {
 	if(confirm("Are you sure you want to delete " + serviceName + "?")){
-		var validateUrl = host + "/api/service/delete?service-name=" + name;
+		var validateUrl = host + "/api/service/delete?service-name=" + serviceName;
 		var xmlHttp = new XMLHttpRequest();
 		
 		xmlHttp.onreadystatechange=function() {

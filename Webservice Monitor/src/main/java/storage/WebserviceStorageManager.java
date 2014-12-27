@@ -80,7 +80,12 @@ public class WebserviceStorageManager {
 			int responseCode = result.getInt(WEBSERVICE_RESPONSE_CODE);
 			long responseTime = result.getLong(WEBSERVICE_RESPONSE_TIME);
 			Timestamp datetime = result.getTimestamp(WEBSERVICE_DATE);
-			services.add(new WebserviceUpdate(webserviceName, webserviceUrl, new MetricSet(responseCode, responseTime, datetime.getTime())));
+			if(datetime != null){
+				services.add(new WebserviceUpdate(webserviceName, webserviceUrl, new MetricSet(responseCode, responseTime, datetime.getTime())));
+			}else{
+				services.add(new WebserviceUpdate(webserviceName, webserviceUrl, null));
+			}
+			
 		}
 		return services;
 	}
