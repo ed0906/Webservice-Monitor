@@ -1,6 +1,7 @@
 package util;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -140,5 +141,20 @@ public class WebserviceStorageManager {
 			metrics.add(new MetricSet(responseCode, responseTime, datetime.getTime()));
 		}
 		return metrics;
+	}
+	
+	public void deleteMetricsOlderThan(int days) throws SQLException, IOException{
+		Connection connection = database.getConnection();
+		
+		PreparedStatement statement = connection.prepareStatement("SET SQL_SAFE_UPDATES=0");
+		
+		statement = connection.prepareStatement("DELETE FROM " + DATA_TABLE + " WHERE " + WEBSERVICE_DATE + " < (NOW() - INTERVAL ? DAY)");
+		statement.setInt(1, days);
+		
+		Logger.info("Making Query: [" + statement + "]");
+		statement.executeUpdate();
+		
+		statement = connection.prepareStatement("SET SQL_SAFE_UPDATES=1");
+		statement.executeUpdate();
 	}
 }

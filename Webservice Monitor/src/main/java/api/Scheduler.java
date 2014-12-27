@@ -14,7 +14,9 @@ import util.WebserviceStorageManager;
 
 public class Scheduler {
 	
-	private final static int DELAY_SECONDS = 60;
+	private final static int DELAY_SECONDS_UPDATE_TASK = 60;
+	private final static int DELAY_DAYS_CLEANUP_TASK = 1;
+	private final static int METRICS_LIFETIME_DAYS = 7;
 
 	private static ScheduledExecutorService scheduler;
 	
@@ -25,7 +27,8 @@ public class Scheduler {
 	}
 	
 	public void start() throws SQLException, Exception {
-		scheduler.scheduleWithFixedDelay(getRunnableUpdateTask(), 5l, DELAY_SECONDS, TimeUnit.SECONDS);
+		scheduler.scheduleWithFixedDelay(getRunnableUpdateTask(), 5l, DELAY_SECONDS_UPDATE_TASK, TimeUnit.SECONDS);
+		scheduler.scheduleWithFixedDelay(getRunnableCleanupTask(), 0l, DELAY_DAYS_CLEANUP_TASK, TimeUnit.DAYS);
 	}
 	
 	public void stop(){
@@ -38,17 +41,33 @@ public class Scheduler {
 				public void run() {
 					Logger.info("Running scheduled update");
 					MonitorAPI api = new MonitorAPI();
+					WebserviceStorageManager storage = new WebserviceStorageManager();
 					try{
-						WebserviceStorageManager storage = new WebserviceStorageManager();
 						List<WebserviceOverview> services = api.getWebserviceList();
 						for(Webservice service : services){
 							MetricSet metrics = api.getUpdate(service.getName());
 							storage.save(service.getName(), metrics);
 						}
 					}catch(Exception e){
-						Logger.error("Scheduled task failure", e);
+						Logger.error("Scheduled update task failure", e);
 					}
 				}
+		};
+	}
+	
+	private static Runnable getRunnableCleanupTask() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				Logger.info("Running cleanup task");
+				WebserviceStorageManager storage = new WebserviceStorageManager();
+				try {
+					storage.deleteMetricsOlderThan(METRICS_LIFETIME_DAYS);
+				} catch (Exception e) {
+					Logger.error("Scheduled cleanup task failure", e);
+				}
+			}
+			
 		};
 	}
 }
