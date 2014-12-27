@@ -1,4 +1,4 @@
-package api;
+package storage;
 
 import java.io.IOException;
 import java.sql.Connection;

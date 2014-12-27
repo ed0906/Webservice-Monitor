@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import api.Database;
+import storage.Database;
 
 public class ApplicationPropertiesTest {
 		

@@ -9,8 +9,8 @@ import java.util.List;
 
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceOverview;
-import util.WebserviceStorageManager;
+import model.WebserviceUpdate;
+import storage.WebserviceStorageManager;
 
 public class MonitorAPI {
 	
@@ -34,7 +34,7 @@ public class MonitorAPI {
 		return storage.getWebservice(serviceName);
 	}
 	
-	public List<WebserviceOverview> getWebserviceList() throws SQLException, Exception {
+	public List<WebserviceUpdate> getWebserviceList() throws SQLException, Exception {
 		return storage.listWebservices();
 	}
 	

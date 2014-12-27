@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceOverview;
+import model.WebserviceUpdate;
+import storage.WebserviceStorageManager;
 import util.Logger;
-import util.WebserviceStorageManager;
 
 public class Scheduler {
 	
@@ -43,7 +43,7 @@ public class Scheduler {
 					MonitorAPI api = new MonitorAPI();
 					WebserviceStorageManager storage = new WebserviceStorageManager();
 					try{
-						List<WebserviceOverview> services = api.getWebserviceList();
+						List<WebserviceUpdate> services = api.getWebserviceList();
 						for(Webservice service : services){
 							MetricSet metrics = api.getUpdate(service.getName());
 							storage.save(service.getName(), metrics);

@@ -1,4 +1,4 @@
-package util;
+package storage;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,10 +8,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import util.Logger;
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceOverview;
-import api.Database;
+import model.WebserviceUpdate;
 
 import com.google.common.collect.Lists;
 
@@ -68,19 +68,19 @@ public class WebserviceStorageManager {
 		statement.executeUpdate();
 	}
 	
-	public List<WebserviceOverview> listWebservices() throws IOException, SQLException {
+	public List<WebserviceUpdate> listWebservices() throws IOException, SQLException {
 		PreparedStatement statement = database.getConnection().prepareStatement("SELECT t1.name, t1.url, t2.* FROM " + WEBSERVICE_TABLE + " t1 LEFT JOIN (SELECT name, max(date) as mx from " + DATA_TABLE + " GROUP BY name) as X ON X.name = t1.name LEFT JOIN " + DATA_TABLE + " t2 ON t2.name = X.name AND t2.date = X.mx");
 		
 		Logger.info("Making Query: [" + statement + "]");
 		ResultSet result = statement.executeQuery();
-		List<WebserviceOverview> services = Lists.newArrayList();
+		List<WebserviceUpdate> services = Lists.newArrayList();
 		while(result.next()){
 			String webserviceName = result.getString(WEBSERVICE_NAME);
 			String webserviceUrl = result.getString(WEBSERVICE_URL);
 			int responseCode = result.getInt(WEBSERVICE_RESPONSE_CODE);
 			long responseTime = result.getLong(WEBSERVICE_RESPONSE_TIME);
 			Timestamp datetime = result.getTimestamp(WEBSERVICE_DATE);
-			services.add(new WebserviceOverview(webserviceName, webserviceUrl, new MetricSet(responseCode, responseTime, datetime.getTime())));
+			services.add(new WebserviceUpdate(webserviceName, webserviceUrl, new MetricSet(responseCode, responseTime, datetime.getTime())));
 		}
 		return services;
 	}

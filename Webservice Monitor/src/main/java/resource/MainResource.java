@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceOverview;
+import model.WebserviceUpdate;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,7 +45,7 @@ public final class MainResource {
 		Logger.info("List Service Request");
 		MonitorAPI api = new MonitorAPI();
 		try {
-			List<WebserviceOverview> services = api.getWebserviceList();
+			List<WebserviceUpdate> services = api.getWebserviceList();
 			return Response.ok(services).header(ORIGIN, CLIENT).build();
 		} catch (Exception e) {
 			Logger.warning("List services failed", e);

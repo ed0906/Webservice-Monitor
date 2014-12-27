@@ -14,6 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import storage.WebserviceStorageManager;
+
 public class WebserviceStorageManagerTest {
 
 	private WebserviceStorageManager storage;
