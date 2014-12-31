@@ -9,16 +9,17 @@ import java.util.List;
 
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceUpdate;
-import storage.WebserviceStorageManager;
+import model.WebserviceMetricUpdate;
+import model.WebserviceSummary;
+import storage.StorageClient;
 
 public class MonitorAPI {
 	
-	private static WebserviceStorageManager storage;
+	private static StorageClient storage;
 	
 	public MonitorAPI() {
 		if(storage == null) {
-			storage = new WebserviceStorageManager();
+			storage = new StorageClient();
 		}
 	}
 	
@@ -34,7 +35,7 @@ public class MonitorAPI {
 		return storage.getWebservice(serviceName);
 	}
 	
-	public List<WebserviceUpdate> getWebserviceList() throws SQLException, Exception {
+	public List<WebserviceMetricUpdate> getWebserviceList() throws SQLException, Exception {
 		return storage.listWebservices();
 	}
 	
@@ -61,5 +62,9 @@ public class MonitorAPI {
 	
 	public List<MetricSet> getMetrics(String serviceName, Date from, Date until) throws SQLException, Exception {
 		return storage.getMetricsBetween(serviceName, from.getTime(), until.getTime());
+	}
+	
+	public List<WebserviceSummary> getWebserviceSummaries() throws SQLException, IOException {
+		return storage.getOverview();
 	}
 }

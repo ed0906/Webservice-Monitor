@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceUpdate;
-import storage.WebserviceStorageManager;
+import model.WebserviceMetricUpdate;
+import storage.StorageClient;
 import util.Logger;
 
 public class Scheduler {
@@ -41,9 +41,9 @@ public class Scheduler {
 				public void run() {
 					Logger.info("Running scheduled update");
 					MonitorAPI api = new MonitorAPI();
-					WebserviceStorageManager storage = new WebserviceStorageManager();
+					StorageClient storage = new StorageClient();
 					try{
-						List<WebserviceUpdate> services = api.getWebserviceList();
+						List<WebserviceMetricUpdate> services = api.getWebserviceList();
 						for(Webservice service : services){
 							MetricSet metrics = api.getUpdate(service.getName());
 							storage.save(service.getName(), metrics);
@@ -60,7 +60,7 @@ public class Scheduler {
 			@Override
 			public void run() {
 				Logger.info("Running cleanup task");
-				WebserviceStorageManager storage = new WebserviceStorageManager();
+				StorageClient storage = new StorageClient();
 				try {
 					storage.deleteMetricsOlderThan(METRICS_LIFETIME_DAYS);
 				} catch (Exception e) {

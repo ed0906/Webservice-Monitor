@@ -14,18 +14,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import storage.WebserviceStorageManager;
+import storage.StorageClient;
 
 public class WebserviceStorageManagerTest {
 
-	private WebserviceStorageManager storage;
+	private StorageClient storage;
 	
 	private final static String TEST_WEBSERVICE_NAME = "name";
 	private final static String TEST_WEBSERVICE_URL = "url";
 	
 	@Before
 	public void setUp() throws SQLException {
-		storage = new WebserviceStorageManager();
+		storage = new StorageClient();
 	}
 	
 	@Test

@@ -10,13 +10,13 @@ import java.util.List;
 
 import model.MetricSet;
 import model.Webservice;
-import model.WebserviceUpdate;
+import model.WebserviceMetricUpdate;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import storage.WebserviceStorageManager;
+import storage.StorageClient;
 
 public class MonitorAPITest {
 	
@@ -42,19 +42,19 @@ public class MonitorAPITest {
 	
 	@Test
 	public void shouldGetListOfSavedWebservices() throws Exception {
-		WebserviceStorageManager storage = new WebserviceStorageManager();
+		StorageClient storage = new StorageClient();
 		
 		MetricSet metrics1 = new MetricSet(0,0,0);
-		Webservice service1 = new WebserviceUpdate(TEST_WEBSERVICE1_NAME,TEST_WEBSERVICE1_URL, metrics1);
+		Webservice service1 = new WebserviceMetricUpdate(TEST_WEBSERVICE1_NAME,TEST_WEBSERVICE1_URL, metrics1);
 		monitorApi.addWebservice(service1);
 		storage.save(TEST_WEBSERVICE1_NAME, metrics1);
 		
 		MetricSet metrics2 = new MetricSet(0,0,0);
-		Webservice service2 = new WebserviceUpdate(TEST_WEBSERVICE2_NAME,TEST_WEBSERVICE2_URL, metrics2);
+		Webservice service2 = new WebserviceMetricUpdate(TEST_WEBSERVICE2_NAME,TEST_WEBSERVICE2_URL, metrics2);
 		monitorApi.addWebservice(service2);
 		storage.save(TEST_WEBSERVICE2_NAME, new MetricSet(0,0,0));
 		
-		List<WebserviceUpdate> services = monitorApi.getWebserviceList();
+		List<WebserviceMetricUpdate> services = monitorApi.getWebserviceList();
 		assertTrue(services.contains(service1));
 		assertTrue(services.contains(service2));
 	}

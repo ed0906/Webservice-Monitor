@@ -1,7 +1,7 @@
 var host = "http://localhost:8315"
 
 function loadTable() {
-	var url = host + "/api/service/all";
+	var url = host + "/api/service/get";
 	var xmlHttp = new XMLHttpRequest();
     
 	xmlHttp.onreadystatechange=function() {

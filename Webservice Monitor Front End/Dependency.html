@@ -2,11 +2,11 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="styles-essential.css">
         <link rel="stylesheet" type="text/css" href="options.css">
-        <script src="js-essential.js"></script>
-        <script type="text/javascript">
-			window.onload = loadTable;
-			setInterval(loadTable, 60000);
-        </script>
+        <script type="text/javascript" src="vendor/raphael.js"></script>
+    	<script type="text/javascript" src="vendor/jquery-1.8.2.js"></script>
+    	<script type="text/javascript" src="lib/dracula_graffle.js"></script>
+    	<script type="text/javascript" src="lib/dracula_graph.js"></script>
+    	<script type="text/javascript" src="dependency.js"></script>
 		<title>Webservice Monitor</title>
 	</head>
 	<body>
@@ -19,8 +19,8 @@
             <div id="header-lower">
             	<div id="header-lower-content" class="center">
                 	<ul id="main-menu">
-                    	<li><a href="#">Home</a></li>
-                        <li><a href="dependency.html">Dependency Tree</a></li>
+                    	<li><a href="default.html">Home</a></li>
+                        <li><a href="#">Dependency Tree</a></li>
                         <li onClick="openOptions()"><a href="#">Add Webservice</a></li>
                     </ul>
                 </div>
@@ -41,15 +41,7 @@
         </div>
 		<div id="main-body">
             <div id="main-body-content" class="center">
-                <table id="table">
-                    <tr id="table-header">
-                        <th>Service</th>
-                        <th>Status</th>
-                        <th>Response Time (ms)</th>
-                        <th>Last Updated</th>
-                        <th></th>
-                    </tr>
-                </table>
+                <div id="canvas" style="display: block; background: #EFF6FF; height: 600px; width: 100%;"></div>
             </div>
 		</div>
 		<div id="footer">

@@ -1,11 +1,11 @@
 package model;
 
 
-public class WebserviceUpdate extends Webservice{
+public class WebserviceMetricUpdate extends Webservice{
 
 	private MetricSet metrics;
 	
-	public WebserviceUpdate(String name, String url, MetricSet metrics) {
+	public WebserviceMetricUpdate(String name, String url, MetricSet metrics) {
 		super(name, url);
 		this.metrics = metrics;
 	}
