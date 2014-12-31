@@ -8,6 +8,7 @@ function loadTable() {
 		if (xmlHttp.readyState==4 && xmlHttp.status==200) {
 			var json = JSON.parse(xmlHttp.responseText);
 			var table = document.getElementById("table");
+			var addServiceDropdown = document.getElementById("services");
 			
 			//Remove table contents
 			var tableRows = table.getElementsByTagName('tr');
@@ -33,6 +34,10 @@ function loadTable() {
 				cell4.innerHTML = new Date(json[i].metrics.date).toUTCString();
 				cell5.innerHTML = "<img src=\"res/x_blue.png\" id=\"delete\" onClick=\"removeEntry('" + json[i].name + "')\">";
 				
+				var option = document.createElement("option");
+				option.text = json[i].name;
+				addServiceDropdown.add(option);
+				
 			}
 			
 			//Update LastUpdated
@@ -42,39 +47,6 @@ function loadTable() {
 	}
 	xmlHttp.open("GET", url, true);
     xmlHttp.send();
-}
-
-function openOptions() {
-	document.getElementById('abc').style.display = "block";
-}
-
-function closeOptions(){
-	document.getElementById('abc').style.display = "none";
-}
-
-function validateOptions() {
-	var name = document.getElementById("name").value;
-	var url = document.getElementById("url").value;
-	if (name == "" || url == "") {
-		alert("Both name & Url fields must be filled");
-	} else {
-		var validateUrl = host + "/api/service/add?service-name=" + name + "&url=" + url;
-		var xmlHttp = new XMLHttpRequest();
-		
-		xmlHttp.onreadystatechange=function() {
-			if (xmlHttp.readyState==4) {
-				if(xmlHttp.status == 200){
-					alert("Successfully Added");
-					closeOptions();
-					loadTable();
-				}else{
-					alert("Could not add webservice, please check name & url are valid (Note: url's should have http:// at the start)");
-				}
-			}
-		}
-		xmlHttp.open("POST", validateUrl, true);
-		xmlHttp.send();
-	}
 }
 
 function removeEntry(serviceName) {

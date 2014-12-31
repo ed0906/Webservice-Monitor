@@ -42,14 +42,17 @@ public class Scheduler {
 					Logger.info("Running scheduled update");
 					MonitorAPI api = new MonitorAPI();
 					StorageClient storage = new StorageClient();
+					
+					Webservice service = null;
 					try{
 						List<WebserviceMetricUpdate> services = api.getWebserviceList();
-						for(Webservice service : services){
+						for(int i=0; i<services.size(); i++){
+							service = services.get(i);
 							MetricSet metrics = api.getUpdate(service.getName());
 							storage.save(service.getName(), metrics);
 						}
 					}catch(Exception e){
-						Logger.error("Scheduled update task failure", e);
+						Logger.error("Scheduled update task failure with service " + service, e);
 					}
 				}
 		};

@@ -7,6 +7,8 @@
     	<script type="text/javascript" src="lib/dracula_graffle.js"></script>
     	<script type="text/javascript" src="lib/dracula_graph.js"></script>
     	<script type="text/javascript" src="dependency.js"></script>
+        <script src="js-essential.js"></script>
+        <script src="options.js"></script>
 		<title>Webservice Monitor</title>
 	</head>
 	<body>
@@ -35,13 +37,15 @@
                     <hr>
                     <input id="name" name="name" placeholder="Name" type="text">
                     <input id="url" name="url" placeholder="Url" type="text">
+                    <h4>Depends On</h4>
+                    <select id="services"></select>
                     <a href="javascript:%20validateOptions()" id="submit">Add</a>
                 </form>
             </div>
         </div>
 		<div id="main-body">
             <div id="main-body-content" class="center">
-                <div id="canvas" style="display: block; background: #EFF6FF; height: 600px; width: 100%;"></div>
+                <div id="canvas" style="display: block; height: 400px; width: 100%;"></div>
             </div>
 		</div>
 		<div id="footer">

@@ -12,7 +12,13 @@ window.onload = function() {
 			var g = new Graph();
 			for(var sNo=0; sNo<json.length; sNo++){
 				var name = json[sNo].service.name;
-				g.addNode(name);
+				
+				var metrics = json[sNo].currentMetrics;
+				if(metrics.responseCode == 200){
+					g.addNode(name, {fill: 'green'});
+				}else{
+					g.addNode(name, {fill: 'red'});
+				}
 				
 				var dependents = json[sNo].dependantSystems;
 				for(var dNo=0; dNo<dependents.length; dNo++){
@@ -24,7 +30,7 @@ window.onload = function() {
 			var layouter = new Graph.Layout.Spring(g);
 	
 			var width = 960;
-			var height = 600;
+			var height = 400;
 	  		var renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
 	
 	  		redraw = function() {

@@ -49,6 +49,8 @@ public class MonitorAPI {
 		URL url = new URL(service.getUrl());
 		long startTime = System.currentTimeMillis();
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setConnectTimeout(1000);
+		connection.setReadTimeout(2000);
 		
 		int status = connection.getResponseCode();
 		long elapsedTime = System.currentTimeMillis() - startTime;
