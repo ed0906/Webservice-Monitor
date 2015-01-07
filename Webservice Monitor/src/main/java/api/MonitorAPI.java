@@ -11,6 +11,7 @@ import model.MetricSet;
 import model.Webservice;
 import model.WebserviceMetricUpdate;
 import model.WebserviceSummary;
+import model.dependency.WebserviceLink;
 import storage.StorageClient;
 
 public class MonitorAPI {
@@ -68,5 +69,9 @@ public class MonitorAPI {
 	
 	public List<WebserviceSummary> getWebserviceSummaries() throws SQLException, IOException {
 		return storage.getOverview();
+	}
+
+	public void addWebserviceLink(WebserviceLink link) throws SQLException, IOException {
+		storage.createWebserviceLink(link);
 	}
 }

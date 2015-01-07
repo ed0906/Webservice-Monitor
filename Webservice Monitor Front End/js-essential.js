@@ -8,7 +8,6 @@ function loadTable() {
 		if (xmlHttp.readyState==4 && xmlHttp.status==200) {
 			var json = JSON.parse(xmlHttp.responseText);
 			var table = document.getElementById("table");
-			var addServiceDropdown = document.getElementById("services");
 			
 			//Remove table contents
 			var tableRows = table.getElementsByTagName('tr');
@@ -35,9 +34,7 @@ function loadTable() {
 				cell5.innerHTML = "<img src=\"res/x_blue.png\" id=\"delete\" onClick=\"removeEntry('" + json[i].name + "')\">";
 				
 				var option = document.createElement("option");
-				option.text = json[i].name;
-				addServiceDropdown.add(option);
-				
+				option.text = json[i].name;				
 			}
 			
 			//Update LastUpdated

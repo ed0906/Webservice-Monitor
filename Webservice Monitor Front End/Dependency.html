@@ -8,7 +8,7 @@
     	<script type="text/javascript" src="lib/dracula_graph.js"></script>
     	<script type="text/javascript" src="dependency.js"></script>
         <script src="js-essential.js"></script>
-        <script src="options.js"></script>
+        <script src="options2.js"></script>
 		<title>Webservice Monitor</title>
 	</head>
 	<body>
@@ -23,7 +23,7 @@
                 	<ul id="main-menu">
                     	<li><a href="default.html">Home</a></li>
                         <li><a href="#">Dependency Tree</a></li>
-                        <li onClick="openOptions()"><a href="#">Add Webservice</a></li>
+                        <li onClick="openOptions()"><a href="#">Add Dependency</a></li>
                     </ul>
                 </div>
             </div>
@@ -33,12 +33,11 @@
                 <!-- Contact Us Form -->
                 <form action="#" id="form" method="post" name="form">
                     <img id="close" src="res/x_blue.png" onclick ="closeOptions()">
-                    <h2>New Webservice</h2>
+                    <h2>New Dependency</h2>
                     <hr>
-                    <input id="name" name="name" placeholder="Name" type="text">
-                    <input id="url" name="url" placeholder="Url" type="text">
-                    <h4>Depends On</h4>
-                    <select id="services"></select>
+					<select id="parent" class="dropdown"></select>
+					<h3>Depends On</h3>
+					<select id="child" class="dropdown"></select>
                     <a href="javascript:%20validateOptions()" id="submit">Add</a>
                 </form>
             </div>
